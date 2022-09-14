@@ -24,12 +24,10 @@ input.addEventListener('input', debounce((event) => {
             }
             })
         .catch(error => {
-            if(event.target.value === ''){
                 return countryDesc.innerHTML = '',
                 countryList.innerHTML = '',
-                console.log(error)}
-                return Notiflix.Notify.failure("Oops, there is no country with that name"),
-                console.log(error)
+                console.log(error),
+                Notiflix.Notify.failure("Oops, there is no country with that name")
             });
 }, DEBOUNCE_DELAY));
 
