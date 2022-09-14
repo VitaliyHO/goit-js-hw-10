@@ -32,7 +32,6 @@ input.addEventListener('input', debounce((event) => {
 }, DEBOUNCE_DELAY));
 
 function countryMarkup(countries) {
-    console.log(countries);
     const markup = countries.map(country => {
         return `
         <img src="${country.flags.svg}" alt="flag" width="30">
