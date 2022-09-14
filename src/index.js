@@ -10,12 +10,12 @@ console.log(input);
 
 input.addEventListener('input', debounce((event) => {
     fetchCountries(event.target.value)
-        .then(countries => {
+        .then(countries => countriesMarkup(countries))
+        .catch(error => {
             if(event.target.value === ''){
-                return countryDesc.innerHTML = '';
-            };
-            return countriesMarkup(countries)})
-        .catch(error => console.log(error));
+                return countryDesc.innerHTML = '',
+                console.log(error);
+            }});
 }, 300));
 
 function countriesMarkup(countries) {
