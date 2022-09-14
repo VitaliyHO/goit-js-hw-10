@@ -1,28 +1,43 @@
 import './css/styles.css';
 import { fetchCountries } from './JS/fetchCountries';
 import debounce from 'lodash.debounce';
+import Notiflix from 'notiflix';
 
 const DEBOUNCE_DELAY = 300;
 const input = document.querySelector('#search-box');
-const countryDesc = document.querySelector('.country-info')
+const countryDesc = document.querySelector('.country-info');
+const countryList = document.querySelector('.country-list');
 
-console.log(input);
+Notiflix.Notify.init({position: 'center-top'});
 
 input.addEventListener('input', debounce((event) => {
     fetchCountries(event.target.value)
-        .then(countries => countriesMarkup(countries))
+        .then(countries => {
+            if(countries.length > 10){
+                return Notiflix.Notify.info('Too many matches found. Please enter a more specific name.');
+            }else if(countries.length <= 10 && countries.length > 1){
+                return countryDesc.innerHTML = '',
+                countriesListMarkup(countries)
+            }else if(countries.length === 1){
+                return countryList.innerHTML = '',
+                countryMarkup(countries)
+            }
+            })
         .catch(error => {
             if(event.target.value === ''){
                 return countryDesc.innerHTML = '',
-                console.log(error);
-            }});
-}, 300));
+                countryList.innerHTML = '',
+                console.log(error)}
+                return Notiflix.Notify.failure("Oops, there is no country with that name"),
+                console.log(error)
+            });
+}, DEBOUNCE_DELAY));
 
-function countriesMarkup(countries) {
+function countryMarkup(countries) {
     console.log(countries);
     const markup = countries.map(country => {
         return `
-        <img src="${country.flags.svg}" alt="flag" width="50">
+        <img src="${country.flags.svg}" alt="flag" width="30">
         <h1 class="title">${country.name}</h1>
         <p><b>Capital:</b> ${country.capital}</p>
         <p><b>Population:</b> ${country.population}</p>
@@ -30,4 +45,15 @@ function countriesMarkup(countries) {
     }
     ).join('');
     countryDesc.innerHTML = markup;
+};
+
+function countriesListMarkup(countries) {
+    const markup = countries.map(country => {
+        return `
+        <li class="country-item">
+        <img src="${country.flags.svg}" alt="flag" width="30">
+        <p>${country.name}</p>
+        </li>`
+    }).join('');
+    countryList.innerHTML = markup;
 }
