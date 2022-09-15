@@ -11,7 +11,10 @@ const countryList = document.querySelector('.country-list');
 Notiflix.Notify.init({position: 'center-top'});
 
 input.addEventListener('input', debounce((event) => {
-    if(!event.target.value){return};
+    if(!event.target.value){
+        countryDesc.innerHTML = '';
+        return countryList.innerHTML = '';
+    };
     fetchCountries(event.target.value)
         .then(countries => {
             if(countries.length > 10){
@@ -25,10 +28,6 @@ input.addEventListener('input', debounce((event) => {
             }
             })
         .catch(error => {
-            if(!event.target.value) {
-                countryDesc.innerHTML = '';
-                return countryList.innerHTML = '';
-            };
                 countryDesc.innerHTML = '';
                 countryList.innerHTML = '';
                 console.log(error);
