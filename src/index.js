@@ -24,11 +24,15 @@ input.addEventListener('input', debounce((event) => {
             }
             })
         .catch(error => {
+            if(!event.target.value) {
+                return countryDesc.innerHTML = '',
+                countryList.innerHTML = ''
+            };
                 return countryDesc.innerHTML = '',
                 countryList.innerHTML = '',
                 console.log(error),
                 Notiflix.Notify.failure("Oops, there is no country with that name")
-            });
+        });
 }, DEBOUNCE_DELAY));
 
 function countryMarkup(countries) {
@@ -38,7 +42,7 @@ function countryMarkup(countries) {
         <h1 class="title">${country.name}</h1>
         <p><b>Capital:</b> ${country.capital}</p>
         <p><b>Population:</b> ${country.population}</p>
-        <p><b>Languages:</b> ${country.languages[0].name}</p>`;
+        <p><b>Languages:</b> ${country.languages.map(language=> language.name)}</p>`;
     }
     ).join('');
     countryDesc.innerHTML = markup;
